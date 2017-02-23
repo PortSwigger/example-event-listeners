@@ -13,28 +13,26 @@ class BurpExtender
   #
   
   def	registerExtenderCallbacks(callbacks)
-      
     # keep a reference to our callbacks object
     @callbacks = callbacks
     
     # set our extension name
-    callbacks.setExtensionName("Event listeners")
+    callbacks.setExtensionName "Event listeners"
     
     # obtain our output stream
-    @stdout = java.io.PrintWriter.new(callbacks.getStdout(), true)
+    @stdout = java.io.PrintWriter.new callbacks.getStdout, true
     
     # register ourselves as an HTTP listener
-    callbacks.registerHttpListener(self)
+    callbacks.registerHttpListener self
     
     # register ourselves as a Proxy listener
-    callbacks.registerProxyListener(self)
+    callbacks.registerProxyListener self
     
     # register ourselves as a Scanner listener
-    callbacks.registerScannerListener(self)
+    callbacks.registerScannerListener self
     
     # register ourselves as an extension state listener
-    callbacks.registerExtensionStateListener(self)
-    
+    callbacks.registerExtensionStateListener self
   end
   
   #
@@ -42,10 +40,9 @@ class BurpExtender
   #
 
   def processHttpMessage(toolFlag, messageIsRequest, messageInfo)
-      
     @stdout.println(
             (messageIsRequest ? "HTTP request to " : "HTTP response from ") +
-            messageInfo.getHttpService().toString() +
+            messageInfo.getHttpService.toString +
             " [" + @callbacks.getToolName(toolFlag) + "]")
   end
 
@@ -54,10 +51,9 @@ class BurpExtender
   #
 
   def processProxyMessage(messageIsRequest, message)
-
     @stdout.println(
             (messageIsRequest ? "Proxy request to " : "Proxy response from ") +
-            message.getMessageInfo().getHttpService().toString())
+            message.getMessageInfo.getHttpService.toString)
   end
 
   #
@@ -65,8 +61,7 @@ class BurpExtender
   #
 
   def newScanIssue(issue)
-
-    @stdout.println("New scan issue: " + issue.getIssueName())
+    @stdout.println "New scan issue: #{issue.getIssueName}"
   end
 
   #
@@ -74,10 +69,6 @@ class BurpExtender
   #
 
   def extensionUnloaded()
-
-    @stdout.println("Extension was unloaded")
+    @stdout.println "Extension was unloaded"
   end
-
 end
-
-      

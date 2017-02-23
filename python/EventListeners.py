@@ -12,7 +12,6 @@ class BurpExtender(IBurpExtender, IHttpListener, IProxyListener, IScannerListene
     #
     
     def	registerExtenderCallbacks(self, callbacks):
-        
         # keep a reference to our callbacks object
         self._callbacks = callbacks
         
@@ -33,47 +32,36 @@ class BurpExtender(IBurpExtender, IHttpListener, IProxyListener, IScannerListene
         
         # register ourselves as an extension state listener
         callbacks.registerExtensionStateListener(self)
-        
-        return
     
     #
     # implement IHttpListener
     #
 
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
-        
         self._stdout.println(
                 ("HTTP request to " if messageIsRequest else "HTTP response from ") +
                 messageInfo.getHttpService().toString() +
                 " [" + self._callbacks.getToolName(toolFlag) + "]")
-        return
 
     #
     # implement IProxyListener
     #
 
     def processProxyMessage(self, messageIsRequest, message):
-
         self._stdout.println(
                 ("Proxy request to " if messageIsRequest else "Proxy response from ") +
                 message.getMessageInfo().getHttpService().toString())
-        return
 
     #
     # implement IScannerListener
     #
 
     def newScanIssue(self, issue):
-
         self._stdout.println("New scan issue: " + issue.getIssueName())
-        return
 
     #
     # implement IExtensionStateListener
     #
 
     def extensionUnloaded(self):
-
         self._stdout.println("Extension was unloaded")
-        return
-      
